@@ -7,7 +7,7 @@ def fraud_alert():
     xml = """
     <Response>
         <Speak>This is URBANK. A suspicious transaction was detected on your account.</Speak>
-        <GetDigits timeout="10" numDigits="1" action="https://<your-future-render-app>.onrender.com/ivr/fraud-response" method="POST">
+        <GetDigits timeout="10" numDigits="1" action="https://ivr-flask.onrender.com/ivr/fraud-response" method="POST">
             <Speak>Press 1 to confirm the transaction. Press 2 to report fraud.</Speak>
         </GetDigits>
         <Speak>No input received. Goodbye.</Speak>
