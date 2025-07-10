@@ -2,26 +2,26 @@ from flask import Flask, request, Response
 
 app = Flask(__name__)
 
-@app.route("/ivr/fraud-alert", methods=["POST"])
+@app.route("/ivr/fraud-alert", methods=["GET", "POST"])
 def fraud_alert():
-    custom_field = request.form.get("customField", "")
+    data = request.args if request.method == "GET" else request.form
+    caller = data.get("From")
+    called = data.get("To")
+    custom_field = data.get("customField", "")
 
-    # Parse example: txn_id=TXN123&amount=10000&type=UPI
-    info = dict(item.split("=") for item in custom_field.split("&") if "=" in item)
-    amount = info.get("amount", "an unknown amount")
-    txn_type = info.get("type", "a transaction")
+    # Build your dynamic message
+    message = f"This is URBANK. We noticed a transaction. Press 1 to confirm, 2 to report fraud."
 
-    message = f"This is URBANK. We noticed a {txn_type} of rupees {amount}. Press 1 to confirm, 2 to report fraud."
-
-    response = f"""
+    xml = f"""
     <?xml version="1.0" encoding="UTF-8"?>
     <Response>
         <Say>{message}</Say>
-        <Gather action="https://ivr-flask.onrender.com/ivr/handle-input" method="POST" numDigits="1" timeout="5" />
+        <Gather action="https://<your-host>/ivr/handle-input" method="POST" numDigits="1" timeout="5" />
     </Response>
     """
 
-    return Response(response.strip(), mimetype="text/xml")
+    return Response(xml.strip(), mimetype="text/xml")
+
 
 
 @app.route("/ivr/handle-input", methods=["POST"])
