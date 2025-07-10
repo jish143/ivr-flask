@@ -28,7 +28,7 @@ def fraud_alert():
 @app.route("/greeting", methods=["GET"])
 def greeting():
     # You can use request.args.get("customField") if you want dynamic message later
-    message = "This is a fraud alert call from URBANK."
+    message = "This is a fraud alert call from The Peoples' Urban Co-operative Bank."
 
     # Exotel expects plain text (not XML or JSON) for dynamic greeting
     return Response(message, mimetype="text/plain")
