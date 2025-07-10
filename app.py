@@ -24,25 +24,6 @@ def fraud_alert():
 
 
 
-@app.route("/ivr/handle-input", methods=["POST"])
-def handle_input():
-    digit = request.form.get("Digits")
-    if digit == "1":
-        say = "Thank you. Your transaction has been confirmed."
-    elif digit == "2":
-        say = "We have reported this transaction as fraud. Our team will contact you shortly."
-    else:
-        say = "Invalid input. Goodbye."
-
-    response = f"""
-    <?xml version="1.0" encoding="UTF-8"?>
-    <Response>
-        <Say>{say}</Say>
-        <Hangup/>
-    </Response>
-    """
-
-    return Response(response.strip(), mimetype="text/xml")
 
 @app.route("/greeting", methods=["GET"])
 def greeting():
@@ -52,6 +33,14 @@ def greeting():
     # Exotel expects plain text (not XML or JSON) for dynamic greeting
     return Response(message, mimetype="text/plain")
 
+@app.route("/block", methods=["GET"])
+def test():
+    # Print all query params to console
+    print("Received GET parameters:")
+    for key, value in request.args.items():
+        print(f"{key} = {value}")
+
+    return "Parameters received", 200
 
 @app.route("/")
 def index():
